@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart } from "@/src/store/cart";
 import axios from "axios";
 
 export default function Checkout() {
   const cart = useCart();
   const [loading, setLoading] = useState(false);
-
+  const [orderId, setOrderId] = useState<string | null>(null);
+  
   const placeOrder = async () => {
     if (cart.items.length === 0) {
       alert("Your cart is empty");
@@ -26,16 +27,69 @@ export default function Checkout() {
         }
       );
 
-      cart.clear();
-      alert("Order placed successfully!");
-      // Redirect to order confirmation or home page
-      window.location.href = "/";
+      // Set the order ID so we can proceed to payment
+      setOrderId(response.data._id);
     } catch (error: any) {
       console.error("Error placing order:", error);
       if (error.response?.data?.message) {
         alert(`Error: ${error.response.data.message}`);
       } else {
         alert("Failed to place order. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const initiatePayment = async () => {
+    if (!orderId) return;
+    
+    try {
+      setLoading(true);
+      
+      // Create Razorpay order
+      const response = await axios.post(
+        "http://localhost:4000/api/payments/create",
+        { orderId },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      );
+      
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
+        amount: response.data.amount,
+        currency: "INR",
+        name: "Clothing Store",
+        description: "Order Payment",
+        order_id: response.data.id,
+        handler: function (response: any) {
+          // Note: This is only a client-side callback
+          // The actual payment status is confirmed via webhook
+          alert("Payment captured! Order will be marked as paid shortly.");
+          cart.clear();
+          window.location.href = "/";
+        },
+        prefill: {
+          name: "", // Get from user profile
+          email: "", // Get from user profile
+          contact: "" // Get from user profile
+        },
+        theme: {
+          color: "#3b82f6"
+        }
+      };
+      
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+    } catch (error: any) {
+      console.error("Error initiating payment:", error);
+      if (error.response?.data?.message) {
+        alert(`Error: ${error.response.data.message}`);
+      } else {
+        alert("Failed to initiate payment. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -90,15 +144,27 @@ export default function Checkout() {
                 <p className="text-gray-600">Select your payment method</p>
               </div>
               
-              <button
-                onClick={placeOrder}
-                disabled={loading}
-                className={`w-full bg-blue-600 text-white py-3 px-4 rounded-md font-medium ${
-                  loading ? "opacity-70 cursor-not-allowed" : "hover:bg-blue-700"
-                }`}
-              >
-                {loading ? "Processing..." : `Place Order ($${cart.getTotalPrice().toFixed(2)})`}
-              </button>
+              {!orderId ? (
+                <button
+                  onClick={placeOrder}
+                  disabled={loading}
+                  className={`w-full bg-blue-600 text-white py-3 px-4 rounded-md font-medium ${
+                    loading ? "opacity-70 cursor-not-allowed" : "hover:bg-blue-700"
+                  }`}
+                >
+                  {loading ? "Processing..." : `Place Order ($${cart.getTotalPrice().toFixed(2)})`}
+                </button>
+              ) : (
+                <button
+                  onClick={initiatePayment}
+                  disabled={loading}
+                  className={`w-full bg-green-600 text-white py-3 px-4 rounded-md font-medium ${
+                    loading ? "opacity-70 cursor-not-allowed" : "hover:bg-green-700"
+                  }`}
+                >
+                  {loading ? "Processing..." : `Pay Now ($${cart.getTotalPrice().toFixed(2)})`}
+                </button>
+              )}
             </div>
           </div>
         </div>
