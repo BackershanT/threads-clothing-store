@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import crypto from "crypto";
 import Order from "../order/order.model";
+import Variant from "../product/variant.model";
 
 export const razorpayWebhook = async (req: Request, res: Response) => {
   try {
@@ -18,21 +19,28 @@ export const razorpayWebhook = async (req: Request, res: Response) => {
       return res.status(400).send("Invalid signature");
     }
 
-    const event = req.body.event;
-
-    if (event === "payment.captured") {
+    if (req.body.event === "payment.captured") {
       const payment = req.body.payload.payment.entity;
-      const orderId = payment.notes?.orderId || payment.receipt;
+      const orderId = payment.notes?.receipt;
 
-      if (orderId) {
-        // Update the order status to PAID
-        await Order.findByIdAndUpdate(orderId, {
-          status: "PAID"
-        });
-
-        console.log(`Order ${orderId} marked as PAID`);
+      const order = await Order.findById(orderId);
+      if (!order || order.status === "PAID") {
+        return res.status(200).send("Already processed");
       }
-    } else if (event === "payment.failed") {
+
+      // 🔥 DEDUCT STOCK
+      for (const item of order.items) {
+        await Variant.findByIdAndUpdate(item.variantId, {
+          $inc: { stock: -item.quantity }
+        });
+      }
+
+      order.status = "PAID";
+      order.paymentId = payment.id;
+      await order.save();
+
+      console.log(`Order ${orderId} marked as PAID and stock deducted`);
+    } else if (req.body.event === "payment.failed") {
       const payment = req.body.payload.payment.entity;
       const orderId = payment.notes?.orderId || payment.receipt;
 
