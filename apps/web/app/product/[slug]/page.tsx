@@ -3,7 +3,7 @@ import ProductClient from "./product-client";
 
 async function getProduct(slug: string) {
   const res = await fetch(
-    `http://localhost:4000/api/products/${slug}`,
+    `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api"}/products/${slug}`,
     { cache: "no-store" }
   );
   return res.json();
@@ -12,20 +12,28 @@ async function getProduct(slug: string) {
 export async function generateMetadata(
   { params }: any
 ): Promise<Metadata> {
-  const res = await fetch(
-    `http://localhost:4000/api/products/${params.slug}`
-  );
-  const { product } = await res.json();
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api"}/products/${params.slug}`
+    );
+    const { product } = await res.json();
 
-  return {
-    title: product.name,
-    description: product.description,
-    openGraph: {
+    return {
       title: product.name,
       description: product.description,
-      images: [product.images?.[0]]
-    }
-  };
+      openGraph: {
+        title: product.name,
+        description: product.description,
+        images: [product.images?.[0]]
+      }
+    };
+  } catch (error) {
+    console.error('Error generating metadata:', error);
+    return {
+      title: 'Product Not Found',
+      description: 'Product not found',
+    };
+  }
 }
 
 export default async function ProductPage({ params }: any) {
