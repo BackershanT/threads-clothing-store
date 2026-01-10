@@ -70,7 +70,10 @@ const Header: React.FC = () => {
             <Link href="/new-arrivals" className="text-gray-700 hover:text-gray-900 transition-colors">
               New Arrivals
             </Link>
-            <Link href="/offers" className="text-gray-700 hover:text-gray-900 transition-colors">
+            <Link href="/best-sellers" className="text-gray-700 hover:text-gray-900 transition-colors">
+              Best Sellers
+            </Link>
+            <Link href="/near-offers" className="text-gray-700 hover:text-gray-900 transition-colors">
               Offers
             </Link>
           </nav>

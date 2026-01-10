@@ -44,14 +44,14 @@ const PromoCard: React.FC<PromoCardProps> = ({
 
 interface PromoSectionProps {
   newArrivalsLink: string;
-  offersLink: string;
+  offersLink?: string;
   bestSellersLink?: string;
   showBestSellers?: boolean;
 }
 
 const PromoSection: React.FC<PromoSectionProps> = ({ 
   newArrivalsLink, 
-  offersLink, 
+  offersLink = "/near-offers", 
   bestSellersLink = "/best-sellers", 
   showBestSellers = false 
 }) => {
