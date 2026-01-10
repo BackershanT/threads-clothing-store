@@ -85,7 +85,7 @@ export default function Home() {
           {(index + 1) % 2 === 0 && (
             <PromoSection 
               newArrivalsLink="/new-arrivals" 
-              offersLink="/offers" 
+              offersLink="/near-offers" 
               showBestSellers={index === 1}  // Show Best Sellers as second promo section
               bestSellersLink="/best-sellers"
             />
