@@ -2,19 +2,19 @@ import mongoose from "mongoose";
 declare const _default: mongoose.Model<{
     password: string;
     role: "USER" | "ADMIN";
-    name?: string | null;
-    email?: string | null;
     resetPasswordToken?: string | null;
     resetPasswordExpires?: NativeDate | null;
+    name?: string | null;
+    email?: string | null;
 } & mongoose.DefaultTimestampProps, {}, {}, {
     id: string;
 }, mongoose.Document<unknown, {}, {
     password: string;
     role: "USER" | "ADMIN";
-    name?: string | null;
-    email?: string | null;
     resetPasswordToken?: string | null;
     resetPasswordExpires?: NativeDate | null;
+    name?: string | null;
+    email?: string | null;
 } & mongoose.DefaultTimestampProps, {
     id: string;
 }, {
@@ -22,10 +22,10 @@ declare const _default: mongoose.Model<{
 }> & Omit<{
     password: string;
     role: "USER" | "ADMIN";
-    name?: string | null;
-    email?: string | null;
     resetPasswordToken?: string | null;
     resetPasswordExpires?: NativeDate | null;
+    name?: string | null;
+    email?: string | null;
 } & mongoose.DefaultTimestampProps & {
     _id: mongoose.Types.ObjectId;
 } & {
@@ -37,17 +37,17 @@ declare const _default: mongoose.Model<{
 }, {
     password: string;
     role: "USER" | "ADMIN";
-    name?: string | null;
-    email?: string | null;
     resetPasswordToken?: string | null;
     resetPasswordExpires?: NativeDate | null;
+    name?: string | null;
+    email?: string | null;
 } & mongoose.DefaultTimestampProps, mongoose.Document<unknown, {}, {
     password: string;
     role: "USER" | "ADMIN";
-    name?: string | null;
-    email?: string | null;
     resetPasswordToken?: string | null;
     resetPasswordExpires?: NativeDate | null;
+    name?: string | null;
+    email?: string | null;
 } & mongoose.DefaultTimestampProps, {
     id: string;
 }, mongoose.ResolveSchemaOptions<{
@@ -55,10 +55,10 @@ declare const _default: mongoose.Model<{
 }>> & Omit<{
     password: string;
     role: "USER" | "ADMIN";
-    name?: string | null;
-    email?: string | null;
     resetPasswordToken?: string | null;
     resetPasswordExpires?: NativeDate | null;
+    name?: string | null;
+    email?: string | null;
 } & mongoose.DefaultTimestampProps & {
     _id: mongoose.Types.ObjectId;
 } & {
@@ -71,10 +71,10 @@ declare const _default: mongoose.Model<{
     [x: string]: mongoose.SchemaDefinitionProperty<any, any, mongoose.Document<unknown, {}, {
         password: string;
         role: "USER" | "ADMIN";
-        name?: string | null;
-        email?: string | null;
         resetPasswordToken?: string | null;
         resetPasswordExpires?: NativeDate | null;
+        name?: string | null;
+        email?: string | null;
     } & mongoose.DefaultTimestampProps, {
         id: string;
     }, mongoose.ResolveSchemaOptions<{
@@ -82,10 +82,10 @@ declare const _default: mongoose.Model<{
     }>> & Omit<{
         password: string;
         role: "USER" | "ADMIN";
-        name?: string | null;
-        email?: string | null;
         resetPasswordToken?: string | null;
         resetPasswordExpires?: NativeDate | null;
+        name?: string | null;
+        email?: string | null;
     } & mongoose.DefaultTimestampProps & {
         _id: mongoose.Types.ObjectId;
     } & {
@@ -96,10 +96,10 @@ declare const _default: mongoose.Model<{
 }, {
     password: string;
     role: "USER" | "ADMIN";
-    name?: string | null;
-    email?: string | null;
     resetPasswordToken?: string | null;
     resetPasswordExpires?: NativeDate | null;
+    name?: string | null;
+    email?: string | null;
     createdAt: NativeDate;
     updatedAt: NativeDate;
 } & {
@@ -109,10 +109,10 @@ declare const _default: mongoose.Model<{
 }>, {
     password: string;
     role: "USER" | "ADMIN";
-    name?: string | null;
-    email?: string | null;
     resetPasswordToken?: string | null;
     resetPasswordExpires?: NativeDate | null;
+    name?: string | null;
+    email?: string | null;
     createdAt: NativeDate;
     updatedAt: NativeDate;
 } & {
