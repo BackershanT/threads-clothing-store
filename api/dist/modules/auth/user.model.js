@@ -23,7 +23,9 @@ const userSchema = new mongoose_1.default.Schema({
         type: String,
         enum: ["USER", "ADMIN"],
         default: "USER"
-    }
+    },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 }, { timestamps: true });
 // Note: Password hashing will be handled in the controller for now
 exports.default = mongoose_1.default.model("User", userSchema);

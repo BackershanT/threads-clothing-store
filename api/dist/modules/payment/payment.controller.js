@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createRazorpayOrder = void 0;
 const razorpay_1 = __importDefault(require("razorpay"));
 const order_model_1 = __importDefault(require("../order/order.model"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const createRazorpayOrder = async (req, res) => {
     try {
         const { orderId } = req.body;
@@ -13,9 +15,14 @@ const createRazorpayOrder = async (req, res) => {
         if (!order) {
             return res.status(404).json({ message: "Order not found" });
         }
+        const razorpayKeyId = process.env.RAZORPAY_KEY_ID || 'rzp_test_123456789';
+        const razorpayKeySecret = process.env.RAZORPAY_KEY_SECRET || 'your_test_key_secret';
+        if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+            console.warn('Razorpay keys not configured. Using test keys. This is not suitable for production.');
+        }
         const razorpay = new razorpay_1.default({
-            key_id: process.env.RAZORPAY_KEY_ID,
-            key_secret: process.env.RAZORPAY_KEY_SECRET
+            key_id: razorpayKeyId,
+            key_secret: razorpayKeySecret
         });
         const razorpayOrder = await razorpay.orders.create({
             amount: Math.round(order.totalAmount * 100), // Convert to paise

@@ -7,6 +7,8 @@ interface UserDocument extends mongoose.Document {
   email: string;
   password: string;
   role: string;
+  resetPasswordToken?: string;
+  resetPasswordExpires?: Date;
   isModified(path: string): boolean;
 }
 
@@ -30,7 +32,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["USER", "ADMIN"],
       default: "USER"
-    }
+    },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
   },
   { timestamps: true }
 );
