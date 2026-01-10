@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Link from "next/link";
 import "./globals.css";
+import { AuthProvider } from '@/src/contexts/AuthContext';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,12 +21,12 @@ export const metadata: Metadata = {
     template: "%s | Thread"
   },
   description:
-    "Premium fashion clothing for men and women. Buy online with fast delivery in India.",
-  keywords: ["clothing", "fashion", "online clothing store", "india fashion", "thread"],
+    "Premium fashion clothing for women. Discover timeless pieces crafted for the modern woman.",
+  keywords: ["clothing", "fashion", "women clothing", "luxury fashion", "thread"],
   openGraph: {
     title: "Thread - Premium Fashion Clothing",
     description:
-      "Shop premium fashion clothing online in India.",
+      "Shop premium women's fashion clothing online.",
     type: "website"
   }
 };
@@ -39,13 +41,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <nav className="p-4 border-b flex gap-4">
-          <Link href="/">Home</Link>
-          <Link href="/shop">Shop</Link>
-          <Link href="/cart">Cart</Link>
-          <Link href="/orders">Orders</Link>
-        </nav>
-        {children}
+        <AuthProvider>
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-grow">{children}</main>
+            <Footer />
+          </div>
+        </AuthProvider>
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
       </body>
     </html>
