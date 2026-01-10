@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import authRoutes from "./modules/auth/auth.routes";
+import userRoutes from "./modules/auth/user.routes";
 import productRoutes from "./modules/product/product.routes";
 import categoryRoutes from "./modules/product/category.routes";
 import variantRoutes from "./modules/product/variant.routes";
@@ -16,6 +17,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/variants", variantRoutes);

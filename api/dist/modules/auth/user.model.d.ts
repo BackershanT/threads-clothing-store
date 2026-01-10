@@ -4,6 +4,8 @@ interface UserDocument extends mongoose.Document {
     email: string;
     password: string;
     role: string;
+    resetPasswordToken?: string;
+    resetPasswordExpires?: Date;
     isModified(path: string): boolean;
 }
 declare const _default: mongoose.Model<UserDocument, {}, {}, {}, mongoose.Document<unknown, {}, UserDocument, {}, mongoose.DefaultSchemaOptions> & UserDocument & Required<{
