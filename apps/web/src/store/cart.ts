@@ -26,12 +26,16 @@ export const useCart = create<CartStore>((set, get) => ({
       
       if (existingItemIndex >= 0) {
         const updatedItems = [...state.items];
-        updatedItems[existingItemIndex].quantity += item.quantity;
+        const newQuantity = Math.min(updatedItems[existingItemIndex].quantity + item.quantity, 3);
+        updatedItems[existingItemIndex].quantity = newQuantity;
         return { items: updatedItems };
       }
       
+      // Ensure quantity doesn't exceed 3 when adding new item
+      const newItem = { ...item, quantity: Math.min(item.quantity, 3) };
+      
       // Add new item
-      return { items: [...state.items, item] };
+      return { items: [...state.items, newItem] };
     }),
   remove: (variantId) =>
     set((state) => ({
