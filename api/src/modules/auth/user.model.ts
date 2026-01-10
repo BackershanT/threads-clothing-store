@@ -1,6 +1,15 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
+// Define the User document interface
+interface UserDocument extends mongoose.Document {
+  name: string;
+  email: string;
+  password: string;
+  role: string;
+  isModified(path: string): boolean;
+}
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -26,18 +35,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Password hashing middleware
-userSchema.pre("save", async function (next) {
-  // Only hash the password if it has been modified (or is new)
-  if (!this.isModified("password")) return next();
-  
-  try {
-    // Hash the password with a salt round of 12
-    this.password = await bcrypt.hash(this.password, 12);
-    next();
-  } catch (err) {
-    next(err as any);
-  }
-});
+// Note: Password hashing will be handled in the controller for now
 
-export default mongoose.model("User", userSchema);
+export default mongoose.model<UserDocument>("User", userSchema);

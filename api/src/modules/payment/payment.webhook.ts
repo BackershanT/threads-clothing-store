@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import crypto from "crypto";
+import Razorpay from "razorpay";
 import Order from "../order/order.model";
 import Variant from "../product/variant.model";
 
@@ -30,9 +31,11 @@ export const razorpayWebhook = async (req: Request, res: Response) => {
 
       // 🔥 DEDUCT STOCK
       for (const item of order.items) {
-        await Variant.findByIdAndUpdate(item.variantId, {
-          $inc: { stock: -item.quantity }
-        });
+        if (item.quantity && typeof item.quantity === 'number') {  // Check if quantity exists and is a number
+          await Variant.findByIdAndUpdate(item.variantId, {
+            $inc: { stock: -item.quantity }
+          });
+        }
       }
 
       order.status = "PAID";

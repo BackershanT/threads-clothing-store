@@ -2,11 +2,6 @@ import { Request, Response } from "express";
 import Razorpay from "razorpay";
 import Order from "../order/order.model";
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID!,
-  key_secret: process.env.RAZORPAY_KEY_SECRET!
-});
-
 export const createRazorpayOrder = async (req: Request, res: Response) => {
   try {
     const { orderId } = req.body;
@@ -15,6 +10,11 @@ export const createRazorpayOrder = async (req: Request, res: Response) => {
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
+
+    const razorpay = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID!,
+      key_secret: process.env.RAZORPAY_KEY_SECRET!
+    });
 
     const razorpayOrder = await razorpay.orders.create({
       amount: Math.round(order.totalAmount! * 100), // Convert to paise
