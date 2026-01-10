@@ -2,10 +2,15 @@ import Link from "next/link";
 import Image from "next/image";
 
 async function getProducts() {
-  const res = await fetch("http://localhost:4000/api/products", {
-    cache: "no-store"
-  });
-  return res.json();
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api"}/products`, {
+      cache: "no-store"
+    });
+    return res.json();
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    return [];
+  }
 }
 
 export default async function ShopPage() {
