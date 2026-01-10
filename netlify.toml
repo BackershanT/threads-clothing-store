@@ -1,19 +1,16 @@
 # Customer Site Configuration - Next.js
+# Note: Base directory intentionally omitted to build from repo root
 [build]
-  base = "apps/web"
-  command = "npm run build"
-  publish = ".next"
+  command = "npm ci && npm run build --workspace=apps/web"
+  publish = "apps/web/.next"
 
 [build.environment]
   NODE_VERSION = "20"
-  NPM_FLAGS = "--prefix=apps/web"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
 # Context for admin site deployment
 [context.admin]
-  base = "apps/admin"
-  command = "npm run build"
-  publish = "dist"
-  environment = { NPM_FLAGS = "--prefix=apps/admin" }
+  command = "npm ci && npm run build --workspace=apps/admin"
+  publish = "apps/admin/dist"
