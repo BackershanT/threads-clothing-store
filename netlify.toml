@@ -1,19 +1,19 @@
-# Customer Site Configuration - Built from root using workspace
+# Customer Site Configuration - Next.js
 [build]
-  command = "npm run build --workspace=apps/web"
-  publish = "apps/web/.next"
+  base = "apps/web"
+  command = "npm run build"
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "20"
+  NPM_FLAGS = "--prefix=apps/web"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
 # Context for admin site deployment
-[context.production]
-  command = "npm run build --workspace=apps/web"
-  publish = "apps/web/.next"
-
 [context.admin]
-  command = "npm run build --workspace=apps/admin"
-  publish = "apps/admin/dist"
+  base = "apps/admin"
+  command = "npm run build"
+  publish = "dist"
+  environment = { NPM_FLAGS = "--prefix=apps/admin" }
