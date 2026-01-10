@@ -8,26 +8,28 @@ const variantSchema = new mongoose_1.default.Schema({
     productId: {
         type: mongoose_1.default.Schema.Types.ObjectId,
         ref: "Product",
-        required: true
+        required: true,
     },
     size: {
         type: String,
-        required: true
+        required: true,
     },
     color: {
         type: String,
-        required: true
+        required: true,
     },
-    fabric: String,
+    fabric: {
+        type: String,
+    },
     stock: {
         type: Number,
         required: true,
-        min: 0
+        default: 0,
     },
     price: {
         type: Number,
-        required: true
-    }
+        required: true,
+    },
 }, { timestamps: true });
 exports.default = mongoose_1.default.model("Variant", variantSchema);
 //# sourceMappingURL=variant.model.js.map

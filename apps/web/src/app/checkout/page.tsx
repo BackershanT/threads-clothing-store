@@ -18,7 +18,7 @@ export default function Checkout() {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/orders",
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api"}/orders`,
         { items: cart.items },
         {
           headers: {
@@ -49,7 +49,7 @@ export default function Checkout() {
       
       // Create Razorpay order
       const response = await axios.post(
-        "http://localhost:4000/api/payments/create",
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api"}/payments/create`,
         { orderId },
         {
           headers: {
