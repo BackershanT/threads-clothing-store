@@ -1,4 +1,4 @@
-# Customer Site Configuration - Next.js
+# Main site (customer-facing Next.js app)
 [build]
   base = "apps/web"
   command = "npm run build"
@@ -10,3 +10,15 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# Context for admin site deployment
+[context.production]
+  base = "apps/web"
+  command = "npm run build"
+  publish = "apps/web/.next"
+
+[context.admin]
+  base = "apps/admin"
+  command = "npm run build"
+  publish = "apps/admin/dist"
+  environment = { NPM_FLAGS = "--prefix=apps/admin" }
