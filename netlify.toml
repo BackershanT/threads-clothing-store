@@ -1,7 +1,7 @@
 # Customer Site Configuration - Next.js
 # Note: Base directory intentionally omitted to build from repo root
 [build]
-  command = "npm ci && npm run build --workspace=apps/web"
+  command = "npm install && npm run build --workspace=apps/web"
   publish = "apps/web/.next"
 
 [build.environment]
@@ -12,5 +12,5 @@
 
 # Context for admin site deployment
 [context.admin]
-  command = "npm ci && npm run build --workspace=apps/admin"
+  command = "npm install && npm run build --workspace=apps/admin"
   publish = "apps/admin/dist"
