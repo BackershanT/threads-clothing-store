@@ -8,7 +8,7 @@ export default function OrdersPage() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/orders/my", {
+      .get(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api"}/orders/my`, {
         headers: {
           Authorization: `Bearer ${typeof window !== 'undefined' ? localStorage.getItem("token") : ''}`
         }
