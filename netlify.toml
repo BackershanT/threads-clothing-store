@@ -2,7 +2,7 @@
 [build]
   base = "apps/web"
   command = "npm run build"
-  publish = "apps/web/.next"
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "20"
@@ -15,10 +15,10 @@
 [context.production]
   base = "apps/web"
   command = "npm run build"
-  publish = "apps/web/.next"
+  publish = ".next"
 
 [context.admin]
   base = "apps/admin"
   command = "npm run build"
-  publish = "apps/admin/dist"
+  publish = "dist"
   environment = { NPM_FLAGS = "--prefix=apps/admin" }
