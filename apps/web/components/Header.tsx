@@ -6,10 +6,12 @@ import { useAuth } from '@/src/contexts/AuthContext';
 import { useCart } from '@/src/store/cart';
 import { useFavorites } from '@/src/store/favorites';
 import MobileMenu from './MobileMenu';
+import UserModal from './UserModal';
 
 const Header: React.FC = () => {
   const { user } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const { getTotalItems } = useCart();
   const { getTotalItems: getFavoriteItems } = useFavorites();
   const cartItemCount = getTotalItems();
@@ -21,6 +23,14 @@ const Header: React.FC = () => {
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
+  };
+
+  const toggleUserModal = () => {
+    setIsUserModalOpen(!isUserModalOpen);
+  };
+
+  const closeUserModal = () => {
+    setIsUserModalOpen(false);
   };
 
   // Mock categories data - in a real app this would come from an API
@@ -109,17 +119,21 @@ const Header: React.FC = () => {
               )}
             </Link>
             
-            {!user ? (
-              <Link href="/login" className="text-gray-700 hover:text-gray-900 transition-colors">
+            <button 
+              onClick={toggleUserModal}
+              className="text-gray-700 hover:text-gray-900 transition-colors"
+              aria-label={user ? 'Open user menu' : 'Open login menu'}
+            >
+              {!user ? (
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
-              </Link>
-            ) : (
-              <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center">
-                <span className="text-xs text-gray-700">{user.name.charAt(0)}</span>
-              </div>
-            )}
+              ) : (
+                <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center">
+                  <span className="text-xs text-gray-700">{user.name.charAt(0)}</span>
+                </div>
+              )}
+            </button>
           </div>
         </div>
       </header>
@@ -175,22 +189,27 @@ const Header: React.FC = () => {
               )}
             </Link>
             
-            {!user ? (
-              <Link href="/login" className="text-gray-700 hover:text-gray-900">
+            <button 
+              onClick={toggleUserModal}
+              className="text-gray-700 hover:text-gray-900"
+              aria-label={user ? 'Open user menu' : 'Open login menu'}
+            >
+              {!user ? (
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
-              </Link>
-            ) : (
-              <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center">
-                <span className="text-xs text-gray-700">{user.name.charAt(0)}</span>
-              </div>
-            )}
+              ) : (
+                <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center">
+                  <span className="text-xs text-gray-700">{user.name.charAt(0)}</span>
+                </div>
+              )}
+            </button>
           </div>
         </div>
       </header>
 
       <MobileMenu isOpen={isMobileMenuOpen} onClose={closeMobileMenu} />
+      <UserModal isOpen={isUserModalOpen} onClose={closeUserModal} />
     </>
   );
 };

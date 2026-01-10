@@ -19,13 +19,39 @@ const Carousel: React.FC = () => {
     return () => clearInterval(interval);
   }, [isHovered]);
 
+  const goToPrev = useCallback(() => {
+    setCurrentIndex(prevIndex => 
+      prevIndex === 0 ? bannerData.length - 1 : prevIndex - 1
+    );
+  }, []);
+
+  const goToNext = useCallback(() => {
+    setCurrentIndex(prevIndex => 
+      (prevIndex + 1) % bannerData.length
+    );
+  }, []);
+
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        goToPrev();
+      } else if (e.key === 'ArrowRight') {
+        goToNext();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [goToPrev, goToNext]);
+
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
   };
 
   return (
     <div 
-      className="relative w-full h-[70vh] sm:h-[75vh] md:h-[80vh] lg:h-screen max-h-[1000px] overflow-hidden mx-4 sm:mx-6 md:mx-8"
+      className="relative w-full h-[70vh] sm:h-[75vh] md:h-[80vh] lg:h-[90vh] max-h-[1000px] overflow-hidden mx-4 sm:mx-6 md:mx-8 rounded-lg"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -41,7 +67,7 @@ const Carousel: React.FC = () => {
               <span className="text-gray-500">Banner {index + 1}</span>
             </div>
             
-            <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent opacity-80"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent"></div>
             
             <div className="absolute bottom-8 left-8 sm:left-12 md:left-16 max-w-md text-white z-20">
               <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 tracking-wide">{banner.title}</h3>
@@ -71,7 +97,26 @@ const Carousel: React.FC = () => {
         ))}
       </div>
 
-     
+      {/* Navigation Arrows - Visible on all screens */}
+      <button
+        onClick={goToPrev}
+        className="absolute left-4 sm:left-6 md:left-8 top-1/2 transform -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-white/20 text-white backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-all duration-300 rounded-full border border-white/30 shadow-lg"
+        aria-label="Previous slide"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      
+      <button
+        onClick={goToNext}
+        className="absolute right-4 sm:right-6 md:right-8 top-1/2 transform -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-white/20 text-white backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-all duration-300 rounded-full border border-white/30 shadow-lg"
+        aria-label="Next slide"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
     </div>
   );
 };

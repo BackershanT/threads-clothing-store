@@ -27,39 +27,52 @@ export default function FavoritesPage() {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">My Favorites</h2>
+    <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 md:p-8">
+      <div className="mb-8">
+        <h2 className="text-2xl sm:text-3xl font-bold">My Favorites</h2>
+        <p className="text-gray-600 mt-2">Your saved items for later purchase</p>
+      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
         {items.map((item) => (
-          <div key={item.productId} className="border rounded-lg overflow-hidden bg-white">
-            <div className="h-48 bg-gray-200 flex items-center justify-center">
+          <div key={item.productId} className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
+            <div className="h-56 bg-gray-100 flex items-center justify-center">
               {item.image ? (
                 <img 
                   src={item.image} 
                   alt={item.name} 
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24'%3E%3Cpath fill='%23ccc' d='M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M19,19H5V8.58L12,15.58L19,8.58V19M12,12.81L5,5.81H19L12,12.81Z'/%3E%3C/svg%3E";
+                  }}
                 />
               ) : (
-                <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
+                <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
               )}
             </div>
             
             <div className="p-4">
-              <h3 className="font-medium truncate">{item.name}</h3>
-              <p className="text-gray-600 font-semibold">₹{item.price.toFixed(2)}</p>
+              <h3 className="font-medium text-lg truncate">{item.name}</h3>
+              <p className="text-gray-600 font-semibold mt-1">₹{item.price.toFixed(2)}</p>
               
-              <div className="mt-4 flex space-x-2">
+              <div className="mt-4 flex flex-col sm:flex-row gap-2">
                 <button 
-                  className="flex-1 bg-black text-white py-2 rounded-md hover:bg-gray-800 transition-colors text-sm"
+                  className="flex-1 bg-black text-white py-2.5 rounded-lg hover:bg-gray-800 transition-colors text-sm font-medium"
                   onClick={() => handleAddToCart(item)}
                 >
                   Add to Cart
                 </button>
                 
                 <button 
-                  className="p-2 border rounded-md hover:bg-gray-100"
+                  className="p-2.5 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
                   onClick={() => remove(item.productId)}
+                  aria-label="Remove from favorites"
                 >
                   <svg 
                     xmlns="http://www.w3.org/2000/svg" 
