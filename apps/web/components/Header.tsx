@@ -60,23 +60,9 @@ const Header: React.FC = () => {
               Home
             </Link>
             
-            {/* Categories Dropdown */}
-            <div className="relative group">
-              <button className="text-gray-700 hover:text-gray-900 transition-colors">
-                Categories
-              </button>
-              <div className="absolute hidden group-hover:block mt-2 w-48 bg-white shadow-lg rounded-md py-2 z-50">
-                {categories.map(category => (
-                  <Link 
-                    key={category.id}
-                    href={`/categories/${category.id}`}
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                  >
-                    {category.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
+            <Link href="/categories" className="text-gray-700 hover:text-gray-900 transition-colors">
+              Categories
+            </Link>
             
             <Link href="/size-guide" className="text-gray-700 hover:text-gray-900 transition-colors">
               Size Guide
