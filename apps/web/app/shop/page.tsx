@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 async function getProducts() {
   const res = await fetch("http://localhost:4000/api/products", {
@@ -15,10 +16,15 @@ export default async function ShopPage() {
       {products.map((p: any) => (
         <Link key={p._id} href={`/product/${p.slug}`}>
           <div className="border p-4 hover:shadow-lg transition">
-            <img
-              src={p.images?.[0] || "/placeholder.png"}
-              className="h-48 w-full object-cover"
-            />
+            <div className="h-48 w-full">
+              <Image
+                src={p.images?.[0] || "/placeholder.png"}
+                alt={p.name}
+                width={300}
+                height={300}
+                className="h-full w-full object-cover"
+              />
+            </div>
             <h3 className="mt-2 font-semibold">{p.name}</h3>
             <p className="text-gray-600">₹{p.basePrice}</p>
           </div>

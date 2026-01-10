@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { useCart } from "../../../src/store/cart";
+import Image from "next/image";
 
 const ProductViewer = dynamic(
   () => import("@/components/3d/ProductViewer"),
@@ -19,10 +20,15 @@ export default function ProductClient({ product, variants }: any) {
       {/* LEFT SIDE */}
       <div>
         {!show3D ? (
-          <img
-            src={product.images?.[0] || "/placeholder.png"}
-            className="w-full h-96 object-cover"
-          />
+          <div className="w-full h-96">
+            <Image
+              src={product.images?.[0] || "/placeholder.png"}
+              alt={product.name}
+              width={400}
+              height={500}
+              className="w-full h-full object-cover"
+            />
+          </div>
         ) : (
           <ProductViewer modelUrl={product.model3dUrl || "/placeholder.gltf"} />
         )}

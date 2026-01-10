@@ -11,12 +11,21 @@ const Model = dynamic(() => import("./ProductModel"), {
 export default function ProductViewer({ modelUrl }: { modelUrl: string }) {
   return (
     <div className="h-[400px] w-full">
-      <Canvas camera={{ position: [0, 0, 4], fov: 50 }}>
+      <Canvas 
+        camera={{ position: [0, 0, 4], fov: 50 }}
+        gl={{ antialias: true }}
+        dpr={1}
+      >
         <ambientLight intensity={0.6} />
         <directionalLight position={[5, 5, 5]} />
         <Environment preset="studio" />
         <Model url={modelUrl} />
-        <OrbitControls enableZoom={true} />
+        <OrbitControls 
+          enableZoom={true} 
+          enablePan={false}
+          minDistance={2}
+          maxDistance={10}
+        />
       </Canvas>
     </div>
   );
