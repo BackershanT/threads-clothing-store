@@ -1,7 +1,24 @@
+# Main site (customer-facing Next.js app)
 [build]
   base = "apps/web"
   command = "npm run build"
-  publish = ".next"
+  publish = "apps/web/.next"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--prefix=apps/web"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# Context for admin site deployment
+[context.production]
+  base = "apps/web"
+  command = "npm run build"
+  publish = "apps/web/.next"
+
+[context.admin]
+  base = "apps/admin"
+  command = "npm run build"
+  publish = "apps/admin/dist"
+  environment = { NPM_FLAGS = "--prefix=apps/admin" }
