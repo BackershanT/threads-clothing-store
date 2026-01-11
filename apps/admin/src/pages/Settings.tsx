@@ -54,6 +54,26 @@ const Settings: React.FC = () => {
     setTimeout(() => setShowConfirmation(false), 3000);
   };
 
+  const handlePasswordChange = () => {
+    setShowPasswordModal(true);
+  };
+
+  const handleLogoutAll = () => {
+    setShowLogoutModal(true);
+  };
+
+  const confirmPasswordChange = () => {
+    setShowPasswordModal(false);
+    setShowConfirmation(true);
+    setTimeout(() => setShowConfirmation(false), 3000);
+  };
+
+  const confirmLogout = () => {
+    setShowLogoutModal(false);
+    setShowConfirmation(true);
+    setTimeout(() => setShowConfirmation(false), 3000);
+  };
+
   const tabs = [
     { id: "store", label: "Store" },
     { id: "payments", label: "Payments" },
@@ -238,14 +258,14 @@ const Settings: React.FC = () => {
               <h2 className="text-lg font-semibold">Security</h2>
 
               <button
-                onClick={() => setShowPasswordModal(true)}
+                onClick={handlePasswordChange}
                 className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg"
               >
                 <Key size={16} /> Change Password
               </button>
 
               <button
-                onClick={() => setShowLogoutModal(true)}
+                onClick={handleLogoutAll}
                 className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg"
               >
                 <LogOut size={16} /> Logout All
@@ -259,6 +279,54 @@ const Settings: React.FC = () => {
       {showConfirmation && (
         <div className="fixed bottom-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded-lg">
           Settings saved successfully
+        </div>
+      )}
+
+      {/* PASSWORD CHANGE MODAL */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-md w-full">
+            <h2 className="text-lg font-semibold mb-4">Change Password</h2>
+            <p className="mb-4">Are you sure you want to change your password?</p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowPasswordModal(false)}
+                className="border px-4 py-2 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmPasswordChange}
+                className="bg-indigo-600 text-white px-4 py-2 rounded-lg"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* LOGOUT CONFIRMATION MODAL */}
+      {showLogoutModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-md w-full">
+            <h2 className="text-lg font-semibold mb-4">Logout All Sessions</h2>
+            <p className="mb-4">Are you sure you want to logout from all sessions?</p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowLogoutModal(false)}
+                className="border px-4 py-2 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmLogout}
+                className="bg-red-600 text-white px-4 py-2 rounded-lg"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
