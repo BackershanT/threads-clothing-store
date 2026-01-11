@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Home, Package, Tag, ShoppingCart, Users, BarChart3, DollarSign, Image, Settings, ChevronDown, ChevronRight } from 'lucide-react';
+import { Home, Package, Tag, ShoppingCart, Users, BarChart3, DollarSign, Image, Settings } from 'lucide-react';
 
 const Sidebar: React.FC = () => {
   return (

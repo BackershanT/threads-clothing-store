@@ -29,15 +29,15 @@ interface Order {
 }
 
 const Orders: React.FC = () => {
-  const [orders, setOrders] = useState<Order[]>([
+  const orders = [
     {
       id: "#ORD-001",
       customerId: "CUST-001",
       customerName: "John Smith",
       date: "2026-01-11 10:30 AM",
       amount: 245,
-      paymentStatus: "Paid",
-      orderStatus: "Shipped",
+      paymentStatus: "Paid" as const,
+      orderStatus: "Shipped" as const,
       shippingAddress: "123 Main St, New York",
       razorpayId: "rzp_123456",
       paymentMethod: "Card",
@@ -51,8 +51,7 @@ const Orders: React.FC = () => {
         },
       ],
     },
-  ]);
-
+  ];
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filters, setFilters] = useState({

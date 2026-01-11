@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import {
   Save,
-  Shield,
-  Image,
   Key,
   LogOut,
 } from "lucide-react";
