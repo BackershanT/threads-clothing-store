@@ -6,7 +6,6 @@ import {
   CreditCard,
   Wallet,
   AlertTriangle,
-  CheckCircle,
 } from "lucide-react";
 
 interface Refund {
