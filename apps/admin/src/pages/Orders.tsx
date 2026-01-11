@@ -1,89 +1,202 @@
-import { useEffect, useState } from "react";
-import api from "../services/api";
+import React, { useState } from "react";
+import {
+  Search,
+  Calendar,
+  Eye,
+  Filter,
+} from "lucide-react";
 
-export default function Orders() {
-  const [orders, setOrders] = useState([]);
+interface OrderItem {
+  id: string;
+  productName: string;
+  variant: string;
+  quantity: number;
+  price: number;
+}
 
-  useEffect(() => {
-    api.get("/admin/orders").then((res: any) => setOrders(res.data));
-  }, []);
+interface Order {
+  id: string;
+  customerId: string;
+  customerName: string;
+  date: string;
+  amount: number;
+  paymentStatus: "Paid" | "Pending" | "Failed";
+  orderStatus: "Pending" | "Packed" | "Shipped" | "Delivered" | "Cancelled";
+  shippingAddress: string;
+  razorpayId: string;
+  paymentMethod: string;
+  items: OrderItem[];
+}
 
-  const updateStatus = (id: string, status: string) => {
-    api.patch(`/admin/orders/${id}/status`, { status }).then(() => {
-      alert("Updated");
-      // Refresh orders
-      api.get("/admin/orders").then((res: any) => setOrders(res.data));
-    });
-  };
+const Orders: React.FC = () => {
+  const [orders, setOrders] = useState<Order[]>([
+    {
+      id: "#ORD-001",
+      customerId: "CUST-001",
+      customerName: "John Smith",
+      date: "2026-01-11 10:30 AM",
+      amount: 245,
+      paymentStatus: "Paid",
+      orderStatus: "Shipped",
+      shippingAddress: "123 Main St, New York",
+      razorpayId: "rzp_123456",
+      paymentMethod: "Card",
+      items: [
+        {
+          id: "1",
+          productName: "T-Shirt",
+          variant: "M / Black",
+          quantity: 1,
+          price: 29.99,
+        },
+      ],
+    },
+  ]);
+
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filters, setFilters] = useState({
+    searchTerm: "",
+    orderStatus: "",
+    paymentStatus: "",
+  });
+
+  const filteredOrders = orders.filter((order) => {
+    return (
+      (!filters.searchTerm ||
+        order.id.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+        order.customerName.toLowerCase().includes(filters.searchTerm.toLowerCase())) &&
+      (!filters.orderStatus || order.orderStatus === filters.orderStatus) &&
+      (!filters.paymentStatus || order.paymentStatus === filters.paymentStatus)
+    );
+  });
 
   return (
-    <div style={{ padding: 40 }}>
-      <h2>Orders</h2>
-      <div style={{ marginTop: 20 }}>
-        {orders.map((o: any) => (
-          <div key={o._id} style={{ 
-            border: "1px solid #ddd", 
-            padding: 15, 
-            margin: "10px 0", 
-            borderRadius: 5 
-          }}>
-            <p><strong>Order ID:</strong> {o._id}</p>
-            <p><strong>User:</strong> {o.userId?.name} ({o.userId?.email})</p>
-            <p><strong>Total:</strong> ₹{o.totalAmount}</p>
-            <p><strong>Status:</strong> 
-              <span style={{ 
-                marginLeft: 10, 
-                padding: "2px 8px", 
-                borderRadius: 4,
-                backgroundColor: o.status === "PENDING" ? "#ffeb3b" :
-                               o.status === "PAID" ? "#4caf50" :
-                               o.status === "SHIPPED" ? "#2196f3" :
-                               o.status === "DELIVERED" ? "#8bc34a" : "#f44336",
-                color: "white"
-              }}>
-                {o.status}
-              </span>
-            </p>
-            <p><strong>Payment ID:</strong> {o.paymentId || "N/A"}</p>
-            <div style={{ marginTop: 10 }}>
-              <label htmlFor={`status-${o._id}`} style={{ marginRight: 10 }}>
-                Update Status:
-              </label>
-              <select 
-                id={`status-${o._id}`}
-                onChange={(e) => updateStatus(o._id, e.target.value)}
-                value={o.status}
-                style={{ padding: "5px", borderRadius: 4, border: "1px solid #ccc" }}
+    <div className="max-w-7xl mx-auto p-6">
+      {/* HEADER */}
+      <div className="mb-6 flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800">Orders</h1>
+          <p className="text-gray-600">Manage customer orders</p>
+        </div>
+        <button className="flex items-center gap-2 border px-4 py-2 rounded-lg">
+          <Filter size={16} />
+          Filters
+        </button>
+      </div>
+
+      {/* FILTERS */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="relative">
+          <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
+          <input
+            className="pl-10 w-full border rounded-lg px-3 py-2"
+            placeholder="Search orders"
+            value={filters.searchTerm}
+            onChange={(e) =>
+              setFilters({ ...filters, searchTerm: e.target.value })
+            }
+          />
+        </div>
+
+        <select
+          className="border rounded-lg px-3 py-2"
+          value={filters.orderStatus}
+          onChange={(e) =>
+            setFilters({ ...filters, orderStatus: e.target.value })
+          }
+        >
+          <option value="">All Order Status</option>
+          <option value="Pending">Pending</option>
+          <option value="Packed">Packed</option>
+          <option value="Shipped">Shipped</option>
+          <option value="Delivered">Delivered</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+
+        <select
+          className="border rounded-lg px-3 py-2"
+          value={filters.paymentStatus}
+          onChange={(e) =>
+            setFilters({ ...filters, paymentStatus: e.target.value })
+          }
+        >
+          <option value="">All Payments</option>
+          <option value="Paid">Paid</option>
+          <option value="Pending">Pending</option>
+          <option value="Failed">Failed</option>
+        </select>
+
+        <div className="relative">
+          <Calendar className="absolute left-3 top-2.5 text-gray-400" size={18} />
+          <input type="date" className="pl-10 w-full border rounded-lg px-3 py-2" />
+        </div>
+      </div>
+
+      {/* TABLE */}
+      <div className="bg-white rounded-xl shadow overflow-x-auto">
+        <table className="w-full">
+          <thead className="border-b text-xs uppercase text-gray-500">
+            <tr>
+              <th className="p-4 text-left">Order</th>
+              <th>Customer</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Payment</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {filteredOrders.map((order) => (
+              <tr key={order.id} className="border-b hover:bg-gray-50">
+                <td className="p-4">{order.id}</td>
+                <td>{order.customerName}</td>
+                <td>{order.date}</td>
+                <td>${order.amount.toFixed(2)}</td>
+                <td>{order.paymentStatus}</td>
+                <td>{order.orderStatus}</td>
+                <td>
+                  <button
+                    onClick={() => {
+                      setSelectedOrder(order);
+                      setIsModalOpen(true);
+                    }}
+                    className="text-indigo-600"
+                  >
+                    <Eye size={16} />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* MODAL */}
+      {isModalOpen && selectedOrder && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-2xl w-full">
+            <h2 className="text-lg font-semibold mb-4">Order Details</h2>
+
+            <p><b>Order:</b> {selectedOrder.id}</p>
+            <p><b>Customer:</b> {selectedOrder.customerName}</p>
+            <p><b>Address:</b> {selectedOrder.shippingAddress}</p>
+
+            <div className="mt-6 text-right">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="border px-4 py-2 rounded-lg"
               >
-                <option value="PENDING">PENDING</option>
-                <option value="PAID">PAID</option>
-                <option value="SHIPPED">SHIPPED</option>
-                <option value="DELIVERED">DELIVERED</option>
-                <option value="CANCELLED">CANCELLED</option>
-              </select>
-            </div>
-            
-            <div style={{ marginTop: 15 }}>
-              <h4>Items:</h4>
-              {o.items.map((item: any) => (
-                <div key={item._id} style={{ 
-                  display: "flex", 
-                  justifyContent: "space-between", 
-                  padding: "5px 0",
-                  borderBottom: "1px solid #eee"
-                }}>
-                  <div>
-                    <strong>Variant:</strong> {item.variantId?.size} {item.variantId?.color} {item.variantId?.fabric}
-                  </div>
-                  <div>
-                    <strong>Qty:</strong> {item.quantity} | <strong>Price:</strong> ₹{item.price}
-                  </div>
-                </div>
-              ))}
+                Close
+              </button>
             </div>
           </div>
-        ))}
-      </div>
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default Orders;

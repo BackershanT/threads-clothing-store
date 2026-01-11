@@ -30,7 +30,8 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
     { label: 'Categories', href: '/categories' },
     { label: 'Size Guide', href: '/size-guide' },
     { label: 'New Arrivals', href: '/new-arrivals' },
-    { label: 'Offers', href: '/offers' },
+    { label: 'Best Sellers', href: '/best-sellers' },
+    { label: 'Offers', href: '/near-offers' },
   ];
 
   return (

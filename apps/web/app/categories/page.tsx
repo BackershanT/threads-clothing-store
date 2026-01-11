@@ -11,7 +11,7 @@ const categories = [
   { id: 'outerwear', name: 'Outerwear' },
   { id: 'accessories', name: 'Accessories' },
   { id: 'new-arrivals', name: 'New Arrivals' },
-  { id: 'offers', name: 'Special Offers' },
+  { id: 'near-offers', name: 'Special Offers' },
   { id: 'best-sellers', name: 'Best Sellers' },
 ];
 
