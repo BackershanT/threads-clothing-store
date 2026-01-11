@@ -1,60 +1,34 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import SignupNew from "./pages/SignupNew";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
-import Dashboard from "./pages/Dashboard";
-import Products from "./pages/Products";
-import CreateProduct from "./pages/CreateProduct";
-import CreateVariant from "./pages/CreateVariant";
-import CreateCategory from "./pages/CreateCategory";
-import Categories from "./pages/Categories";
-import MainLayout from "./layouts/MainLayout";
-import ProtectedRoute from "./components/ProtectedRoute";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import AdminLayout from './layouts/main/AdminLayout';
+import Dashboard from './pages/Dashboard';
+import Products from './pages/Products';
+import Orders from './pages/Orders';
+import Analytics from './pages/Analytics';
+import Payments from './pages/Payments';
+import Settings from './pages/Settings';
+import Categories from './pages/Categories';
+import Banners from './pages/Banners';
+import Customers from './pages/Customers';
 
-export default function App() {
+function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/signup-new" element={<SignupNew />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route element={<MainLayout />}> 
-          <Route path="/" element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          } />
-          <Route path="/products" element={
-            <ProtectedRoute>
-              <Products />
-            </ProtectedRoute>
-          } />
-          <Route path="/product/new" element={
-            <ProtectedRoute>
-              <CreateProduct />
-            </ProtectedRoute>
-          } />
-          <Route path="/variant/new" element={
-            <ProtectedRoute>
-              <CreateVariant />
-            </ProtectedRoute>
-          } />
-          <Route path="/category/new" element={
-            <ProtectedRoute>
-              <CreateCategory />
-            </ProtectedRoute>
-          } />
-          <Route path="/categories" element={
-            <ProtectedRoute>
-              <Categories />
-            </ProtectedRoute>
-          } />
-        </Route>
+        <Route path="/" element={<AdminLayout><Dashboard /></AdminLayout>} />
+        <Route path="/dashboard" element={<AdminLayout><Dashboard /></AdminLayout>} />
+        <Route path="/products" element={<AdminLayout><Products /></AdminLayout>} />
+        <Route path="/orders" element={<AdminLayout><Orders /></AdminLayout>} />
+        <Route path="/analytics" element={<AdminLayout><Analytics /></AdminLayout>} />
+        <Route path="/payments" element={<AdminLayout><Payments /></AdminLayout>} />
+        <Route path="/settings" element={<AdminLayout><Settings /></AdminLayout>} />
+        <Route path="/categories" element={<AdminLayout><Categories /></AdminLayout>} />
+        <Route path="/banners" element={<AdminLayout><Banners /></AdminLayout>} />
+        <Route path="/customers" element={<AdminLayout><Customers /></AdminLayout>} />
+        <Route path="*" element={<Navigate to="/dashboard" />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
+
+export default App
